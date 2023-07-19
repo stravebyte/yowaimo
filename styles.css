@@ -3,18 +3,30 @@
     *{
       margin: 0;
       padding: 0;
+      font-family: 'Orbitron', sans-serif;
     }
     body{
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      background: #f4f4f4;
+      flex-direction: column;
+      
     }
     #game-canvas {
       background-color: #f9f9f0;
       position: fixed;
       display: none;
       width:93%;
+      border-radius: 9px;
+    }
+    input{
+      padding:10px 40px;
+      color:#441;
+      border:1px solid #222;
+      outline:none;
+      transform: translateY(-10px);
     }
 
     #start-button,
@@ -44,7 +56,7 @@
   animation: shake 0.5s;
 }
 .button-54 {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 16px;
   letter-spacing: 2px;
   text-decoration: none;
