@@ -1,9 +1,14 @@
 const canvas = document.getElementById('game-canvas');
+const name = document.getElementById('name');
+
 const ctx = canvas.getContext('2d');
 const bg = new Audio;
 bg.src = 'bg.mp3';
 const button = document.getElementById('button');
 button.addEventListener('click', function(){
+  if(canvas.requestFullscreen){
+  canvas.requestFullscreen();
+  }
   canvas.style.display = 'block';
   button.style.display = 'none';
   bg.play()
@@ -57,7 +62,7 @@ const scoreText = {
   x: 10,
   y: canvas.height - 10,
   color: 'green', // Set text color to black
-  font: '24px Arial'
+  font: '24px Orbitron'
 };
 
 sprite.image.src = 'sprite.png';
@@ -100,7 +105,7 @@ function createBoss() {
 function updateBullets() {
   for (let i = 0; i < bullets.length; i++) {
     const bullet = bullets[i];
-    bullet.y -= 10; // Move the bullet upwards
+    bullet.y -= 20; // Move the bullet upwards
 
     // Remove the bullet from the array if it goes above the canvas
     if (bullet.y < 0) {
@@ -131,24 +136,13 @@ function updateEnemies() {
         j--;
 
         // Increase the score
-        score += 10;
-
-        // Shake effect
-        canvas.classList.add('shake');
-
-        // Vibrate the device if supported
-        if (navigator.vibrate) {
-          navigator.vibrate(100);
-        }
-        if(score <= 500){
-          enemy.speed += 200;
-        }
-
-        // Remove the shake effect after a delay
-        setTimeout(() => {
-          canvas.classList.remove('shake');
-        }, 200);
+        score += 20;
       }
+      
+  if (name.value === 'I_LOVE_BOOBIES') {
+    level = 500;
+    bullet.y -= 3;
+  }
     }
 
     // Remove the enemy from the array if it goes below the canvas
@@ -156,6 +150,19 @@ function updateEnemies() {
       enemies.splice(i, 1);
       i--;
       health -= 10;
+      if(health <= 0){
+        isGameOver = true;
+      }
+      
+        canvas.classList.add('shake');
+
+        // Vibrate the device if supported
+        if (navigator.vibrate) {
+          navigator.vibrate(100);
+        }
+        setTimeout(() => {
+          canvas.classList.remove('shake');
+        }, 200);
     }
   }
 }
@@ -172,6 +179,18 @@ function detectCollision() {
     if (distance < enemy.size / 2 + sprite.size / 2) {
       // Collision occurred, reduce player health
       health -= 10;
+        // Remove the shake effect after a delay
+        
+        // Shake effect
+        canvas.classList.add('shake');
+
+        // Vibrate the device if supported
+        if (navigator.vibrate) {
+          navigator.vibrate(100);
+        }
+        setTimeout(() => {
+          canvas.classList.remove('shake');
+        }, 200);
 
       // Remove the enemy from the array
       enemies.splice(i, 1);
@@ -209,8 +228,8 @@ function update() {
   // Update player position with smoothing
   const dx = sprite.targetX - sprite.x;
   const dy = sprite.targetY - sprite.y;
-  sprite.x += dx * 0.2;
-  sprite.y += dy * 0.2;
+  sprite.x += dx * 0.7;
+  sprite.y += dy * 0.7;
 
   // Keep player within canvas bounds
   sprite.x = Math.max(Math.min(sprite.x, canvas.width - sprite.size / 2), sprite.size / 2);
@@ -221,7 +240,33 @@ if (score >= levelScoreThreshold) {
   levelScoreThreshold += 40;
 
   // Increase enemy difficulty based on the level
-  const enemySpeedMultiplier = 2 + (level / 10); // Adjust the multiplier as desired
+  let enemySpeedMultiplier = 1 + (level / 10); // Adjust the multiplier as desired
+  if(score >= 100){
+  enemySpeedMultiplier = 1.1 + (level / 10);
+  }
+    if (score >= 200) {
+      enemySpeedMultiplier = 1.2 + (level / 10);
+    }  if (score >= 300) {
+        enemySpeedMultiplier = 1.3 + (level / 10);
+      }  if (score >= 400) {
+          enemySpeedMultiplier = 1.4 + (level / 10);
+        }  if (score >= 500) {
+            enemySpeedMultiplier = 1.5 + (level / 10);
+          }  if (score >= 600) {
+              enemySpeedMultiplier = 1.6 + (level / 10);
+            }  if (score >= 700) {
+                enemySpeedMultiplier = 1.7 + (level / 10);
+              }  if (score >= 800) {
+                  enemySpeedMultiplier = 1.8 + (level / 10);
+                }  if (score >= 900) {
+                    enemySpeedMultiplier = 1.9 + (level / 10);
+                  }  if (score >= 1000) {
+                      enemySpeedMultiplier = 2.1 + (level / 10);
+                    }  if (score >= 2000) {
+                        enemySpeedMultiplier = 2.3 + (level / 10);
+                      }  if (score >= 3000) {
+                          enemySpeedMultiplier = 2.4 + (level / 10);
+                        }
 
   for (let i = 0; i < enemies.length; i++) {
     const enemy = enemies[i];
@@ -259,7 +304,7 @@ function render() {
   for (let i = 0; i < bullets.length; i++) {
     const bullet = bullets[i];
 
-    ctx.fillStyle = '#ffff00'; // Set bullet color
+    ctx.fillStyle = '#888'; // Set bullet color
     ctx.fillRect(bullet.x - bullet.size / 2, bullet.y - bullet.size / 2, bullet.size, bullet.size);
   }
 
@@ -298,14 +343,14 @@ let colorOfHealth = 'green';
   
   //levels
   ctx.fillStyle = 'green'; // Set text color to black
-  ctx.font = '24px Arial';
+  ctx.font = '24px Orbitron';
   ctx.fillText(`Level: ${level}`, 10, canvas.height - 50);
 
   // Render game over text if the game is over
   if (isGameOver) {
-    ctx.fillStyle = '#ff0000'; // Set text color
-    ctx.font = '48px Arial';
-    ctx.fillText('GAME OVER', canvas.width / 2 - 100, canvas.height / 2);
+    ctx.fillStyle = '#222'; // Set text color
+    ctx.font = '40px Orbitron';
+    ctx.fillText('GAME OVER', canvas.width / 2 - 140, canvas.height / 2);
   }
 }
 
@@ -339,14 +384,14 @@ canvas.addEventListener('touchstart', () => {
     const bullet = {
       x: sprite.x,
       y: sprite.y - sprite.size / 2,
-      size: 10 // Adjust the bullet size as desired
+      size: 12 // Adjust the bullet size as desired
     };
 
     bullets.push(bullet);
   }
 })
 // Generate enemies at regular intervals
-setInterval(createEnemy, 400); // Adjust the interval as desired
+setInterval(createEnemy, 800); // Adjust the interval as desired
 
 // Generate boss at a certain score
 const BOSS_SCORE_THRESHOLD = 100;
@@ -363,3 +408,4 @@ sprite.image.onload = () => {
   sprite.isLoaded = true;
   gameLoop();
 };
+
